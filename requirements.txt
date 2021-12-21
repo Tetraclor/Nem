@@ -1,3 +1,5 @@
+tensorflow=1.*
+stable-baselines
 gym==0.21.0
 pygame==2.1.0
 numpy~=1.18.5
