@@ -241,43 +241,48 @@ env = CustomEnv()
 # проверка что данная среда подходит для обучения.
 check_env(env, warn=True)
 
-ans = input("1. Load model or 2. learning new model?")
+def main():
+    ans = input("1. Load model or 2. learning new model?")
 
-if ans == "1" or ans == "":
-    model = DQN.load("good_model")
-else:
-    model = DQN(MlpPolicy, env, verbose=1, seed=SEED)
-    timestemps = int(input("learning timestemps (in sec, recomended 20)?")) * 1000
-    # Процесс обучения, 20000
-    model.learn(total_timesteps=timestemps)
+    if ans == "1" or ans == "":
+        model = DQN.load("good_model")
+    else:
+        model = DQN(MlpPolicy, env, verbose=1, seed=SEED)
+        timestemps = int(input("learning timestemps (in sec, recomended 20)?")) * 1000
+        # Процесс обучения, 20000
+        model.learn(total_timesteps=timestemps)
 
-actions = list(range(env.action_space.n))
-reward = 0
-report = []
+    actions = list(range(env.action_space.n))
+    reward = 0
+    report = []
 
-# report_count = int(input("Report count?"))
-report_count = 10
+    # report_count = int(input("Report count?"))
+    report_count = 10
 
-for i in range(report_count):
-    obs = env.reset()
-    dones = False
-    step = 0
-    while not dones and step < 50:
-        action, _states = model.predict(obs)
-        obs, rewards, dones, info = env.step(action)
-        env.render()
+    for i in range(report_count):
+        obs = env.reset()
+        dones = False
+        step = 0
+        while not dones and step < 50:
+            action, _states = model.predict(obs)
+            obs, rewards, dones, info = env.step(action)
+            env.render()
 
-        print(i, action)
-        step += 1
-        time.sleep(STEP_PAUSE)
+            print(i, action)
+            step += 1
+            time.sleep(STEP_PAUSE)
 
-    s = str(i) + ": done:" + str(dones) + " steps:" + str(step) + " tiger proba:" + str(env.tiger_proba)
-    report.append(s)
-    print(s)
+        s = str(i) + ": done:" + str(dones) + " steps:" + str(step) + " tiger proba:" + str(env.tiger_proba)
+        report.append(s)
+        print(s)
 
-for s in report:
-    print(s)
+    for s in report:
+        print(s)
 
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit(0)
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()
